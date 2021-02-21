@@ -1,4 +1,64 @@
 package com.example.quizzer_app;
 
-public class RegisterActivity {
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
+public class RegisterActivity extends AppCompatActivity {
+
+    private EditText email,password,cnfpassword;
+    private Button register;
+    private FirebaseAuth auth;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+        email= findViewById(R.id.register_email);
+        password=findViewById(R.id.register_password);
+        cnfpassword=findViewById(R.id.register_password_cnf);
+        register= findViewById(R.id.register);
+        auth = FirebaseAuth.getInstance();
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text_email = email.getText().toString();
+                String text_password = email.getText().toString();
+                String text_cnfpassword = email.getText().toString();
+                if(TextUtils.isEmpty(text_email)||TextUtils.isEmpty(text_password)||TextUtils.isEmpty(text_cnfpassword)){
+                    Toast.makeText(RegisterActivity.this, "Empty Credentials", Toast.LENGTH_SHORT).show();
+                }
+                else if(!text_password.equals(text_cnfpassword)){
+                    Toast.makeText(RegisterActivity.this, "Passwords Don't Match", Toast.LENGTH_SHORT).show();
+                }else {
+                    registerUser(text_password, text_email);
+                }
+            }
+        });
+    }
+
+    private void registerUser(String text_password, String text_email) {
+        auth.createUserWithEmailAndPassword(text_email,text_password).addOnCompleteListener(RegisterActivity.this,new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(RegisterActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
 }
