@@ -36,20 +36,33 @@ public class RegisterActivity extends AppCompatActivity {
         loginLink = findViewById(R.id.login_link);
         progressBar = findViewById(R.id.progress_bar);
         auth = FirebaseAuth.getInstance();
+
+        if(auth.getCurrentUser() != null){
+            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+            finish();
+        }
+
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String text_email = email.getText().toString().trim();
-                String text_password = email.getText().toString().trim();
-                String text_cnfpassword = email.getText().toString();
+                String text_password = password.getText().toString().trim();
+                String text_cnfpassword = cnfpassword.getText().toString().trim();
                 if(TextUtils.isEmpty(text_email)||TextUtils.isEmpty(text_password)||TextUtils.isEmpty(text_cnfpassword)){
                     Toast.makeText(RegisterActivity.this, "Empty Credentials", Toast.LENGTH_SHORT).show();
+                    if(TextUtils.isEmpty(text_email))
+                        email.setError("Email is Required.");
+                    if(TextUtils.isEmpty(text_password))
+                        password.setError("Password is Required.");
+                    if(TextUtils.isEmpty(text_cnfpassword))
+                        cnfpassword.setError("Confirm Password is Required.");
                 }
                 else if(!text_password.equals(text_cnfpassword)){
-                    Toast.makeText(RegisterActivity.this, "Passwords Don't Match", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Password And Confirm Password Don't Match", Toast.LENGTH_SHORT).show();
                 }
                 else if(text_password.length() < 6){
                     Toast.makeText(RegisterActivity.this, "Passwords Should be at least 6 characters long.", Toast.LENGTH_SHORT).show();
+                    password.setError("Passwords Should be at least 6 characters long.");
                 }
                 else {
                     progressBar.setVisibility(View.VISIBLE);
@@ -71,7 +84,14 @@ public class RegisterActivity extends AppCompatActivity {
         auth.createUserWithEmailAndPassword(text_email, text_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-
+                if(task.isSuccessful()){
+                    Toast.makeText(RegisterActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                }
+                else{
+                    Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
