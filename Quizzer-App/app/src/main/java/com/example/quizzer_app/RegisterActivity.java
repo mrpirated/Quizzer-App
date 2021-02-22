@@ -36,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         if(auth.getCurrentUser() != null){
-            startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+            startActivity(new Intent(getApplicationContext(), Dashboard.class));
             finish();
         }
 
@@ -84,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     Toast.makeText(RegisterActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
                 }
                 else{
                     Toast.makeText(RegisterActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
