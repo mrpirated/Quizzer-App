@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText email,password;
     private Button login;
+    private TextView registerLink;
     private FirebaseAuth auth;
 
     @Override
@@ -31,36 +33,37 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.login_email);
         password = findViewById(R.id.login_password);
         login = findViewById(R.id.login);
+        registerLink = findViewById(R.id.register_link);
         auth = FirebaseAuth.getInstance();
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String text_email = email.getText().toString();
                 String text_password = password.getText().toString();
-                if(TextUtils.isEmpty(text_email)||TextUtils.isEmpty(text_password)){
+                if (TextUtils.isEmpty(text_email) || TextUtils.isEmpty(text_password)) {
                     Toast.makeText(LoginActivity.this, "Empty Credentials", Toast.LENGTH_SHORT).show();
-                }else{
-                    loginUser(text_email,text_password);
+                } else {
+                    loginUser(text_email, text_password);
                 }
             }
         });
-    }
 
-    private void loginUser(String text_email, String text_password) {
-        auth.signInWithEmailAndPassword(text_email, text_password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+        registerLink.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this,StartActivity.class));
-                    finish();
-                }else{
-                    Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(LoginActivity.this,StartActivity.class));
-                    finish();
-                }
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                finish();
             }
         });
     }
-
+    private void loginUser(String text_email, String text_password) {
+        auth.signInWithEmailAndPassword(text_email, text_password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                Toast.makeText(LoginActivity.this, "Login Successfull", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(LoginActivity.this, StartActivity.class));
+                finish();
+            }
+        });
+    }
 }

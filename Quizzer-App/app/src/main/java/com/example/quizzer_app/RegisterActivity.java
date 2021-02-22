@@ -3,11 +3,13 @@ package com.example.quizzer_app;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,6 +21,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText email,password,cnfpassword;
     private Button register;
+    private TextView loginLink;
     private FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
         password=findViewById(R.id.register_password);
         cnfpassword=findViewById(R.id.register_password_cnf);
         register= findViewById(R.id.register);
+        loginLink = findViewById(R.id.login_link);
         auth = FirebaseAuth.getInstance();
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +47,14 @@ public class RegisterActivity extends AppCompatActivity {
                 }else {
                     registerUser(text_password, text_email);
                 }
+            }
+        });
+
+        loginLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                finish();
             }
         });
     }
