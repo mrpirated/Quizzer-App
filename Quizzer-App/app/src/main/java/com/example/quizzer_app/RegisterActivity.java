@@ -21,8 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText email,password,cnfpassword;
-    private Button register;
-    private TextView loginLink;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
     @Override
@@ -32,8 +30,8 @@ public class RegisterActivity extends AppCompatActivity {
         email= findViewById(R.id.register_email);
         password=findViewById(R.id.register_password);
         cnfpassword=findViewById(R.id.register_password_cnf);
-        register= findViewById(R.id.register);
-        loginLink = findViewById(R.id.login_link);
+        Button register = findViewById(R.id.register);
+        TextView loginLink = findViewById(R.id.login_link);
         progressBar = findViewById(R.id.progress_bar);
         auth = FirebaseAuth.getInstance();
 

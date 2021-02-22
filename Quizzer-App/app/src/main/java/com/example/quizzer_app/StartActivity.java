@@ -11,6 +11,7 @@ public class StartActivity extends AppCompatActivity {
 
     private Button login;
     private Button register;
+    private  Button google;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,6 +19,7 @@ public class StartActivity extends AppCompatActivity {
 
         login = findViewById(R.id.login_button);
         register = findViewById(R.id.register_button);
+        google = findViewById(R.id.google_signin);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -30,6 +32,12 @@ public class StartActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(StartActivity.this,RegisterActivity.class));
                 finish();
+            }
+        });
+        google.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
