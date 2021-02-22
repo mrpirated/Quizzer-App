@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView registerLink;
     private ProgressBar progressBar;
     private FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,16 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else {
                     progressBar.setVisibility(View.VISIBLE);
-                    loginUser(text_password, text_email);
+                    auth.signInWithEmailAndPassword(text_email,text_password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(!task.isSuccessful()) {
+                                Toast.makeText(LoginActivity.this, "Sign in Error", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -73,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     Toast.makeText(LoginActivity.this, "Logged In Successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
                 }
                 else{
                     Toast.makeText(LoginActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -82,4 +92,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        auth.addAuthStateListener(firebaseAuthStateListener);
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        auth.removeAuthStateListener(firebaseAuthStateListener);
+//    }
 }
